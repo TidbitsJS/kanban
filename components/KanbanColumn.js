@@ -3,14 +3,11 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableOpacity,
   FlatList,
 } from "react-native";
 import { useStateContext } from "../context/StateContext";
-import CardModal from "./CardModal";
-
-const windowHeight = Dimensions.get("window").height;
+import CommonModal from "./CommonModal";
 
 const KanbanColumn = ({ column }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -60,10 +57,10 @@ const KanbanColumn = ({ column }) => {
         <Text>Add Todo</Text>
       </TouchableOpacity>
       {modalVisible && (
-        <CardModal
+        <CommonModal
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
-          addCardToColumn={addCardToColumn}
+          handleSubmit={addCardToColumn}
         />
       )}
     </View>
@@ -75,7 +72,7 @@ export default KanbanColumn;
 const styles = StyleSheet.create({
   column: {
     width: 300,
-    height: windowHeight / 1.05,
+    height: "100%",
     backgroundColor: "#eee",
     borderRadius: 5,
     margin: 10,

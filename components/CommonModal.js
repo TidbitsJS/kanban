@@ -8,7 +8,7 @@ import {
   TextInput,
 } from "react-native";
 
-const CardModal = ({ modalVisible, setModalVisible, addCardToColumn }) => {
+const CommonModal = ({ modalVisible, setModalVisible, handleSubmit }) => {
   const [text, setText] = React.useState("");
 
   return (
@@ -33,7 +33,7 @@ const CardModal = ({ modalVisible, setModalVisible, addCardToColumn }) => {
             <TouchableOpacity
               style={styles.submitButton}
               onPress={() => {
-                addCardToColumn(text);
+                handleSubmit(text);
               }}
             >
               <Text style={{ color: "#fff" }}>Submit</Text>
@@ -45,7 +45,7 @@ const CardModal = ({ modalVisible, setModalVisible, addCardToColumn }) => {
   );
 };
 
-export default CardModal;
+export default CommonModal;
 
 const styles = StyleSheet.create({
   modal: {
