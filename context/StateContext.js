@@ -28,7 +28,7 @@ export const StateContextProvider = ({ children }) => {
   const fetchTodoData = async () => {
     const fetchData = await fetch("https://jsonplaceholder.typicode.com/todos");
     let todos = await fetchData.json();
-    todos = todos.slice(0, 30);
+    todos = todos.slice(0, 10);
 
     const newState = { ...state };
 
@@ -40,8 +40,7 @@ export const StateContextProvider = ({ children }) => {
       }
     });
 
-    console.log(newState);
-    setState({ ...newState });
+    setState(newState);
   };
 
   useEffect(() => {
@@ -55,7 +54,7 @@ export const StateContextProvider = ({ children }) => {
     );
 
     column.cards.push({
-      id: `${column.cards.length + 1}`,
+      id: Date.now(),
       title,
     });
 
@@ -69,11 +68,12 @@ export const StateContextProvider = ({ children }) => {
       title,
       cards: [],
     });
+
     setState(newState);
   };
 
   return (
-    <StateContext.Provider value={[state, setState, addCard, addColumn]}>
+    <StateContext.Provider value={{ state, setState, addCard, addColumn }}>
       {children}
     </StateContext.Provider>
   );

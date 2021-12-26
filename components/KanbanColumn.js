@@ -7,10 +7,24 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
+import { useStateContext } from "../context/StateContext";
+import CardModal from "./CardModal";
 
 const windowHeight = Dimensions.get("window").height;
 
 const KanbanColumn = ({ column }) => {
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const { addCard } = useStateContext();
+
+  const addCardToColumn = (title) => {
+    if (title.trim() === "") {
+      return;
+    }
+
+    addCard(column.id, title);
+    setModalVisible(false);
+  };
+
   return (
     <View style={styles.column}>
       <View style={styles.wrapper}>
@@ -36,9 +50,22 @@ const KanbanColumn = ({ column }) => {
           />
         </View>
       </View>
-      <TouchableOpacity activeOpacity={0.5} style={styles.columnFooter}>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={styles.columnFooter}
+        onPress={() => {
+          setModalVisible(true);
+        }}
+      >
         <Text>Add Todo</Text>
       </TouchableOpacity>
+      {modalVisible && (
+        <CardModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          addCardToColumn={addCardToColumn}
+        />
+      )}
     </View>
   );
 };

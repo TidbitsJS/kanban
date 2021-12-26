@@ -4,7 +4,7 @@ import { useStateContext } from "../context/StateContext";
 import KanbanColumn from "./KanbanColumn";
 
 const CustomKanban = () => {
-  const [state, setState] = useStateContext();
+  const { state } = useStateContext();
 
   return (
     <ScrollView
