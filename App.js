@@ -5,23 +5,26 @@ import {
   StatusBar,
   ScrollView,
 } from "react-native";
-import Kanban from "./components/Kanban";
+import CustomKanban from "./components/CustomKanban";
+import { StateContextProvider } from "./context/StateContext";
 
 export default function App() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar
-        animated={true}
-        backgroundColor="#fff"
-        barStyle="dark-content"
-      />
+    <StateContextProvider>
+      <SafeAreaView style={{ flex: 1 }}>
+        <StatusBar
+          animated={true}
+          backgroundColor="#fff"
+          barStyle="dark-content"
+        />
 
-      <ScrollView>
-        <View style={styles.container}>
-          <Kanban />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        <ScrollView>
+          <View style={styles.container}>
+            <CustomKanban />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </StateContextProvider>
   );
 }
 
