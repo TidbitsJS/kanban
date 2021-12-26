@@ -1,73 +1,62 @@
 import React from "react";
 import { Board, BoardRepository } from "react-native-draganddrop-board";
+import {
+  ActivityIndicator,
+  Dimensions,
+  View,
+  Text,
+  StyleSheet,
+} from "react-native";
+
+const windowHeight = Dimensions.get("window").height;
 
 const data = [
   {
     id: 1,
     name: "TO DO",
-    rows: [
-      {
-        id: "1",
-        name: "Analyze your audience",
-        description:
-          "Learn more about the audience to whom you will be speaking",
-      },
-      {
-        id: "2",
-        name: "Select a topic",
-        description:
-          "Select a topic that is of interest to the audience and to you",
-      },
-      {
-        id: "3",
-        name: "Define the objective",
-        description:
-          "Write the objective of the presentation in a single concise statement",
-      },
-    ],
+    rows: [],
   },
   {
     id: 2,
     name: "IN PROGRESS",
-    rows: [
-      {
-        id: "4",
-        name: "Look at drawings",
-        description: "How did they use line and shape? How did they shade?",
-      },
-      {
-        id: "5",
-        name: "Draw from drawings",
-        description: "Learn from the masters by copying them",
-      },
-      {
-        id: "6",
-        name: "Draw from photographs",
-        description:
-          "For most people, it’s easier to reproduce an image that’s already two-dimensional",
-      },
-    ],
+    rows: [],
   },
   {
     id: 3,
     name: "DONE",
-    rows: [
-      {
-        id: "7",
-        name: "Draw from life",
-        description: "Do you enjoy coffee? Draw your coffee cup",
-      },
-      {
-        id: "8",
-        name: "Take a class",
-        description: "Check your local university extension",
-      },
-    ],
+    rows: [],
   },
 ];
 
 const Kanban = () => {
+  const [todoData, setTodoData] = React.useState(null);
   const [boardRepository] = React.useState(new BoardRepository(data));
+
+  const fetchTodoData = async () => {
+    const fetchData = await fetch("https://jsonplaceholder.typicode.com/todos");
+    let todos = await fetchData.json();
+    todos = todos.slice(0, 10);
+
+    todos.forEach((todo) => {
+      if (todo.completed) {
+        data[0].rows.push(todo);
+      } else {
+        data[1].rows.push(todo);
+      }
+    });
+
+    setTodoData(data);
+  };
+
+  React.useEffect(() => {
+    fetchTodoData();
+  }, []);
+
+  if (!todoData) {
+    return <ActivityIndicator size="large" color="red" />;
+  }
+
+  boardRepository.updateData(todoData);
 
   return (
     <Board
@@ -77,8 +66,35 @@ const Kanban = () => {
         console.log(board);
       }}
       boardBackground="#fff"
+      columnHeight={windowHeight}
+      cardContent={(item) => (
+        <View style={styles.card}>
+          <Text style={styles.cardText}>{item.title}</Text>
+        </View>
+      )}
     />
   );
 };
 
 export default Kanban;
+
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    padding: 10,
+    margin: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  cardText: {
+    fontSize: 14,
+    textTransform: "capitalize",
+  },
+});
