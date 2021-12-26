@@ -21,7 +21,7 @@ const CommonModal = ({ modalVisible, setModalVisible, handleSubmit }) => {
               setModalVisible(!modalVisible);
             }}
           >
-            <Text>Close</Text>
+            <Text style={{ color: "#f00" }}>Close</Text>
           </TouchableOpacity>
           <View style={styles.modalBody}>
             <TextInput
@@ -75,13 +75,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: "100%",
     borderColor: "#ccc",
+    color: "#2b386e",
   },
   submitButton: {
     margin: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-    backgroundColor: "green",
+    backgroundColor: "#3aab5a",
   },
   closeButton: {
     margin: 10,

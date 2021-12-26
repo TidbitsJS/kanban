@@ -25,22 +25,34 @@ export const StateContextProvider = ({ children }) => {
     },
   });
 
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const fetchTodoData = async () => {
-    const fetchData = await fetch("https://jsonplaceholder.typicode.com/todos");
-    let todos = await fetchData.json();
-    todos = todos.slice(0, 10);
+    setLoading(true);
+    try {
+      const fetchData = await fetch(
+        "https://jsonplaceholder.typicode.com/todos"
+      );
+      let todos = await fetchData.json();
+      todos = todos.slice(0, 10);
 
-    const newState = { ...state };
+      const newState = { ...state };
 
-    todos.forEach((todo) => {
-      if (todo.completed) {
-        newState.kanban.columns[0].cards.push(todo);
-      } else {
-        newState.kanban.columns[1].cards.push(todo);
-      }
-    });
+      todos.forEach((todo) => {
+        if (todo.completed) {
+          newState.kanban.columns[0].cards.push(todo);
+        } else {
+          newState.kanban.columns[1].cards.push(todo);
+        }
+      });
 
-    setState(newState);
+      setState(newState);
+      setLoading(false);
+    } catch (e) {
+      setError(true);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -73,7 +85,9 @@ export const StateContextProvider = ({ children }) => {
   };
 
   return (
-    <StateContext.Provider value={{ state, setState, addCard, addColumn }}>
+    <StateContext.Provider
+      value={{ state, loading, error, setState, addCard, addColumn }}
+    >
       {children}
     </StateContext.Provider>
   );

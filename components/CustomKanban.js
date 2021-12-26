@@ -1,11 +1,10 @@
 import React from "react";
 import {
-  ScrollView,
   StyleSheet,
   View,
   Text,
-  Dimensions,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import { useStateContext } from "../context/StateContext";
 import CommonModal from "./CommonModal";
@@ -13,7 +12,6 @@ import KanbanColumn from "./KanbanColumn";
 
 const CustomKanban = () => {
   const { state, addColumn } = useStateContext();
-  const windowHeight = Dimensions.get("window").height;
   const [modalVisible, setModalVisible] = React.useState(false);
 
   const addNewColumn = (title) => {
@@ -30,32 +28,31 @@ const CustomKanban = () => {
       style={{
         flex: 1,
         width: "100%",
-        minHeight: windowHeight,
+        height: "100%",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
-      <View style={{ flex: 1 }}>
-        <ScrollView
-          horizontal
-          contentContainerStyle={{ padding: 5 }}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-        >
-          {state.kanban.columns.map((column) => {
-            return (
-              <KanbanColumn key={column.title + column.id} column={column} />
-            );
-          })}
-        </ScrollView>
-      </View>
+      <FlatList
+        data={state.kanban.columns}
+        renderItem={({ item }) => (
+          <KanbanColumn key={item.title + item.id} column={item} />
+        )}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ height: "100%" }}
+        horizontal
+      />
 
       <TouchableOpacity
         style={styles.addColumn}
         onPress={() => setModalVisible(true)}
       >
-        <Text style={{ fontSize: 16, fontWeight: "bold" }}>Add column +</Text>
+        <Text style={{ fontSize: 16, fontWeight: "bold", color: "#1f1010" }}>
+          Add column
+        </Text>
       </TouchableOpacity>
+
       {modalVisible && (
         <CommonModal
           modalVisible={modalVisible}
@@ -72,9 +69,9 @@ export default CustomKanban;
 const styles = StyleSheet.create({
   addColumn: {
     padding: 12,
-    marginTop: 10,
+    marginVertical: 3,
     width: "96%",
-    borderRadius: 20,
+    borderRadius: 25,
     backgroundColor: "#eee",
     justifyContent: "center",
     alignItems: "center",

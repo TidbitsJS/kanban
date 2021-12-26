@@ -26,27 +26,37 @@ const KanbanColumn = ({ column }) => {
     <View style={styles.column}>
       <View style={styles.wrapper}>
         <View style={styles.columnHeader}>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+          <Text style={{ fontSize: 20, fontWeight: "bold", color: "#1f1010" }}>
             {column.title}
           </Text>
           <View style={styles.badge}>
-            <Text style={{ fontSize: 12 }}>{column.cards.length}</Text>
+            <Text
+              style={{
+                fontSize: column.cards.length > 20 ? 10 : 12,
+                color: "#fff",
+              }}
+            >
+              {column.cards.length > 20 ? "20+" : column.cards.length}
+            </Text>
           </View>
         </View>
-        <View>
+        <View style={styles.columnBody}>
           <FlatList
             data={column.cards}
             renderItem={({ item }) => (
               <View style={styles.card} key={item.id}>
-                <Text style={{ fontSize: 14 }}>{item.title}</Text>
+                <Text style={{ fontSize: 14, color: "#2b386e" }}>
+                  {item.title}
+                </Text>
               </View>
             )}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={{ paddingBottom: 50 }}
+            contentContainerStyle={{ paddingBottom: 100 }}
             showsVerticalScrollIndicator={false}
           />
         </View>
       </View>
+
       <TouchableOpacity
         activeOpacity={0.5}
         style={styles.columnFooter}
@@ -54,8 +64,9 @@ const KanbanColumn = ({ column }) => {
           setModalVisible(true);
         }}
       >
-        <Text>Add Todo</Text>
+        <Text style={{ color: "#1f1010" }}>Add Todo</Text>
       </TouchableOpacity>
+
       {modalVisible && (
         <CommonModal
           modalVisible={modalVisible}
@@ -72,27 +83,32 @@ export default KanbanColumn;
 const styles = StyleSheet.create({
   column: {
     width: 300,
-    height: "100%",
-    backgroundColor: "#eee",
-    borderRadius: 5,
     margin: 10,
+    borderRadius: 5,
+    backgroundColor: "#f5f5f5",
+    justifyContent: "space-between",
   },
   wrapper: {
     flex: 1,
-    padding: 10,
   },
   columnHeader: {
+    padding: 10,
     marginBottom: 10,
     flexDirection: "row",
+    backgroundColor: "#ddd",
   },
   badge: {
-    backgroundColor: "#f00",
+    backgroundColor: "#1f1010",
     width: 30,
     height: 30,
     borderRadius: 15,
     marginLeft: 10,
     justifyContent: "center",
     alignItems: "center",
+  },
+  columnBody: {
+    flex: 1,
+    paddingHorizontal: 10,
   },
   card: {
     backgroundColor: "#fff",
@@ -106,10 +122,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 3,
   },
   columnFooter: {
-    padding: 15,
+    padding: 10,
     backgroundColor: "#ddd",
     justifyContent: "center",
     alignItems: "center",
